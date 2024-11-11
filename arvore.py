@@ -73,21 +73,17 @@ class AVLTree:
         if not self.root:
             return None
 
-        # Clear any existing plots and create new figure
         plt.close('all')
         fig = plt.figure(figsize=(12, 8))
         ax = fig.add_subplot(111)
         
-        # Create graph
         graph = nx.DiGraph()
         self._add_edges(graph, self.root)
         
-        # Calculate positions
         positions = {}
         self._calculate_positions(self.root, 0, 0.5, 1.0, positions)
         
         if positions and len(positions) > 0:
-            # Draw edges
             edges = list(graph.edges())
             if edges:
                 nx.draw_networkx_edges(
@@ -98,19 +94,17 @@ class AVLTree:
                     arrowsize=20,
                     connectionstyle="arc3,rad=0.2"
                 )
-            
-            # Prepare nodes and colors
+    
             nodes = list(graph.nodes())
             colors = []
             for node in nodes:
                 if node.sentiment == 1:
-                    colors.append('#90EE90')  # Light green for positive
+                    colors.append('#90EE90')  
                 elif node.sentiment == -1:
-                    colors.append('#FFB6C1')  # Light pink for negative
+                    colors.append('#FFB6C1')  
                 else:
-                    colors.append('#E0E0E0')  # Light gray for neutral
+                    colors.append('#E0E0E0')  
             
-            # Draw nodes
             nx.draw_networkx_nodes(
                 graph,
                 positions,
@@ -119,7 +113,6 @@ class AVLTree:
                 node_size=2500
             )
             
-            # Add labels
             labels = {node: f"{node.word}\n({node.sentiment})" for node in nodes}
             nx.draw_networkx_labels(
                 graph,
@@ -128,13 +121,11 @@ class AVLTree:
                 font_size=8
             )
         
-        # Configure plot
         plt.title("Visualização da Árvore AVL de Sentimentos")
         ax.set_xticks([])
         ax.set_yticks([])
         plt.axis('off')
         
-        # Adjust layout
         plt.tight_layout()
         
         return fig
@@ -209,24 +200,21 @@ class AVLTree:
         else:
             return "Seu texto parece neutro... 😐"
 
-# Configuração da página Streamlit
+
 st.set_page_config(
     page_title="Análise de Sentimentos",
     layout="wide"
 )
 
-# Título principal
-st.title("🎭 Análise de Sentimentos com Árvore AVL")
+st.title("Análise de Sentimentos com Árvore AVL")
 
-# Inicialização da árvore na sessão
 if 'avl_tree' not in st.session_state:
     st.session_state.avl_tree = AVLTree()
 
 # Criação das abas
-tab1, tab2 = st.tabs(["📝 Cadastrar Palavras", "📊 Analisar Texto"])
+tab1, tab2 = st.tabs(["📝 Adicionar palavras", "📊 Analisar Texto"])
 
 with tab1:
-    st.header("Cadastro de Palavras e Sentimentos")
     
     col1, col2 = st.columns([3, 2])
     with col1:
@@ -245,8 +233,6 @@ with tab1:
             st.success(f"Palavra '{word}' inserida com sentimento {sentiment}")
         else:
             st.error("Por favor, digite uma palavra.")
-
-    # Visualização da árvore com tratamento de erro
     if st.session_state.avl_tree.root:
         st.subheader("Visualização da Árvore")
         try:
